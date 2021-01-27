@@ -1,0 +1,7 @@
+netex\controller\MovieController.class
+netex\model\Movie.class
+netex\JSON$1.class
+netex\Main.class
+netex\JSON.class
+netex\repositories\MovieRepository.class
+netex\service\MovieService.class

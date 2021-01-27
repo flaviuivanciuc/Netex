@@ -1,8 +1,13 @@
 package netex.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.Objects;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "movies")
 public class Movie {
@@ -10,14 +15,23 @@ public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @JsonProperty("Title")
     private String title;
+    @JsonProperty("Released")
     private String released;
+    @JsonProperty("Plot")
     private String plot;
+    @JsonProperty("Rated")
     private String rated;
+    @JsonProperty("Genre")
     private String genre;
+    @JsonProperty("imdbRating")
     private Float imdbRating;
+    @JsonProperty("Actors")
     private String actors;
+    @JsonProperty("Writer")
     private String writer;
+    @JsonProperty("Director")
     private String director;
 
     public Movie() {
