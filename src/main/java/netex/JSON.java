@@ -16,33 +16,32 @@ import java.net.http.HttpResponse;
 
 public class JSON {
 
-//    private static final String POSTS_API_URL = "http://www.omdbapi.com/?s=Batman&apikey=7b8f241f";
+    private static final String POSTS_API_URL = "http://www.omdbapi.com/?s=Batman&apikey=7b8f241f";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
-//        HttpClient client = HttpClient.newHttpClient();
-//        HttpRequest request = HttpRequest.newBuilder()
-//                .GET()
-//                .header("accept", "application/json")
-//                .uri(URI.create(POSTS_API_URL))
-//                .build();
-//        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .GET()
+                .header("accept", "application/json")
+                .uri(URI.create(POSTS_API_URL))
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-//        System.out.println(response.body());
+        System.out.println(response.body());
 
-        // parse JSON into objects
-        // configuring the ObjectMapper to allow stuff
-//        JsonFactory factory = new JsonFactory();
-//        factory.enable(JsonParser.Feature.IGNORE_UNDEFINED);
-//
-//        ObjectMapper mapper = new ObjectMapper(factory);
-//        MovieSearch movieSearch = mapper.readValue(response.body(), new TypeReference<>() {
-//        });
-//        System.out.println(movieSearch.getMovieList().get(2));
-//
-//        MovieService movieService = null;
-//
-//        movieSearch.getMovieList().forEach(movie -> movieService.saveMovie(movie));
+//         parse JSON into objects
+//         configuring the ObjectMapper to allow stuff
+        JsonFactory factory = new JsonFactory();
+        factory.enable(JsonParser.Feature.IGNORE_UNDEFINED);
+
+        ObjectMapper mapper = new ObjectMapper(factory);
+        MovieSearch movieSearch = mapper.readValue(response.body(), new TypeReference<>() {
+        });
+        System.out.println(movieSearch.getMovieList().get(2));
+
+        MovieService movieService = null;
+        movieSearch.getMovieList().forEach(movie -> movieService.saveMovie(movie));
 //        movieService.saveMovie(movieSearch.getMovieList());
     }
 }

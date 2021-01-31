@@ -1,25 +1,15 @@
 package netex.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import netex.model.Movie;
-import netex.model.MovieSearch;
 import netex.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
 
 @Service
 public class MovieService {
-
-    private static final String POSTS_API_URL = "http://www.omdbapi.com/?s=Batman&apikey=7b8f241f";
-    private static final ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
     private MovieRepository repository;
@@ -28,24 +18,14 @@ public class MovieService {
         this.repository = repository;
     }
 
-    public HttpResponse<String> response() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .GET()
-                .header("accept", "application/json")
-                .uri(URI.create(POSTS_API_URL))
-                .build();
-        return client.send(request, HttpResponse.BodyHandlers.ofString());
-    }
-
     //POST
     public Movie saveMovie(Movie movie) {
         return repository.save(movie);
     }
 
     //POST
-    public List<Movie> saveMovie(List<Movie> movie) {
-        return repository.saveAll(movie);
+    public List<Movie> saveMovies(List<Movie> movies) {
+        return repository.saveAll(movies);
     }
 
     //GET

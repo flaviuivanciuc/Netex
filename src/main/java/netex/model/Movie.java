@@ -1,6 +1,5 @@
 package netex.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -17,6 +16,8 @@ public class Movie {
     private Integer id;
     @JsonProperty("Title")
     private String title;
+    @JsonProperty("Year")
+    private Integer year;
     @JsonProperty("Released")
     private String released;
     @JsonProperty("Plot")
@@ -37,9 +38,10 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(Integer id, String title, String released, String plot, String rated, String genre, Float imdbRating, String actors, String writer, String director) {
+    public Movie(Integer id, String title, Integer year, String released, String plot, String rated, String genre, Float imdbRating, String actors, String writer, String director) {
         this.id = id;
         this.title = title;
+        this.year = year;
         this.released = released;
         this.plot = plot;
         this.rated = rated;
@@ -130,14 +132,23 @@ public class Movie {
         this.director = director;
     }
 
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
     @Override
     public String toString() {
         return "Movie{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", releaseDate=" + released +
+                ", year=" + year +
+                ", released='" + released + '\'' +
                 ", plot='" + plot + '\'' +
-                ", rated=" + rated +
+                ", rated='" + rated + '\'' +
                 ", genre='" + genre + '\'' +
                 ", imdbRating=" + imdbRating +
                 ", actors='" + actors + '\'' +
@@ -151,11 +162,11 @@ public class Movie {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Movie movie = (Movie) o;
-        return Objects.equals(id, movie.id) && Objects.equals(title, movie.title) && Objects.equals(released, movie.released) && Objects.equals(plot, movie.plot) && Objects.equals(rated, movie.rated) && Objects.equals(genre, movie.genre) && Objects.equals(imdbRating, movie.imdbRating) && Objects.equals(actors, movie.actors) && Objects.equals(writer, movie.writer) && Objects.equals(director, movie.director);
+        return Objects.equals(id, movie.id) && Objects.equals(title, movie.title) && Objects.equals(year, movie.year) && Objects.equals(released, movie.released) && Objects.equals(plot, movie.plot) && Objects.equals(rated, movie.rated) && Objects.equals(genre, movie.genre) && Objects.equals(imdbRating, movie.imdbRating) && Objects.equals(actors, movie.actors) && Objects.equals(writer, movie.writer) && Objects.equals(director, movie.director);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, released, plot, rated, genre, imdbRating, actors, writer, director);
+        return Objects.hash(id, title, year, released, plot, rated, genre, imdbRating, actors, writer, director);
     }
 }
