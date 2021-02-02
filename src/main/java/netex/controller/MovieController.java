@@ -1,70 +1,92 @@
 package netex.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import netex.model.Movie;
-import netex.model.MovieSearch;
 import netex.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping(path = "/movies")
 public class MovieController {
 
-        private static final String POSTS_API_URL_S = "http://www.omdbapi.com/?s=Fellowship&apikey=7b8f241f&page=2";
-    private static final String POSTS_API_URL = "http://www.omdbapi.com/?apikey=7b8f241f&t=The_Lord_of_the_Rings:_The_Fellowship_of_the_Ring";
+//        private static final String POSTS_API_URL_S = "http://www.omdbapi.com/?s=Fellowship&apikey=7b8f241f&page=2";
+//    private static final String POSTS_API_URL = "http://www.omdbapi.com/?apikey=7b8f241f&t=The_Lord_of_the_Rings:_The_Fellowship_of_the_Ring";
 
     @Autowired
     private MovieService service;
+
+    public MovieController() {
+//        String name = "Flaviu is doing stuff here!";
+//        System.out.println(name);
+//        try {
+//            for (int i = 0; i < 1; i++) {
+//                final String BASE_URL = "http://www.omdbapi.com";
+//
+//                HttpHeaders headers = new HttpHeaders();
+//                headers.setContentType(MediaType.APPLICATION_JSON);
+//
+//                HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+//
+//                RestTemplate restTemplate = new RestTemplate();
+//                ResponseEntity<Movie> responseEntity = restTemplate.exchange(BASE_URL + "/?apikey=7b8f241f&" +
+//                        "i=tt" + (int) (Math.random() * (1000000) + 1000000) +
+//                        "&type=movie", HttpMethod.GET, httpEntity, Movie.class);
+//
+//                Movie movie = responseEntity.getBody();
+//                assert movie != null;
+//                if (movie.getTitle() == null) {
+//                    continue;
+//                }
+//                service.saveMovie(movie);
+//            }
+//        } catch (RestClientException e) {
+//            e.printStackTrace();
+//        }
+    }
 
     public MovieController(MovieService service) {
         this.service = service;
     }
 
-    @GetMapping("/getMovies")
-    public List<Movie> getMoviesSearch() throws IOException, InterruptedException {
-        List<Movie> movies = getMovieListRequest();
-        return service.saveMovies(movies);
-    }
-
-    private List<Movie> getMovieListRequest() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .GET()
-                .header("accept", "application/json")
-                .uri(URI.create(POSTS_API_URL_S))
-                .build();
-        ObjectMapper mapper = new ObjectMapper();
-        MovieSearch movieSearch = mapper.readValue(client.send(request, HttpResponse.BodyHandlers.ofString()).body(), new TypeReference<MovieSearch>() {
-        });
-        List<Movie> movies = movieSearch.getMovieList();
-        return movies;
-    }
-
-    @GetMapping("/getMovie")
-    public Movie getMovie() throws IOException, InterruptedException {
-        return service.saveMovie(get(POSTS_API_URL));
-    }
-
-    private Movie get(String POSTS_API_URL) throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .GET()
-                .header("accept", "application/json")
-                .uri(URI.create(POSTS_API_URL))
-                .build();
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(client.send(request, HttpResponse.BodyHandlers.ofString()).body(), new TypeReference<Movie>() {
-        });
-    }
+//    @GetMapping("/getMovies")
+//    public List<Movie> getMoviesSearch() throws IOException, InterruptedException {
+//        List<Movie> movies = getMovieListRequest();
+//        return service.saveMovies(movies);
+//    }
+//
+//    private List<Movie> getMovieListRequest() throws IOException, InterruptedException {
+//        HttpClient client = HttpClient.newHttpClient();
+//        HttpRequest request = HttpRequest.newBuilder()
+//                .GET()
+//                .header("accept", "application/json")
+//                .uri(URI.create(POSTS_API_URL_S))
+//                .build();
+//        ObjectMapper mapper = new ObjectMapper();
+//        MovieSearch movieSearch = mapper.readValue(client.send(request, HttpResponse.BodyHandlers.ofString()).body(), new TypeReference<MovieSearch>() {
+//        });
+//        List<Movie> movies = movieSearch.getMovieList();
+//        return movies;
+//    }
+//
+//    @GetMapping("/getMovie")
+//    public Movie getMovie() throws IOException, InterruptedException {
+//        return service.saveMovie(get(POSTS_API_URL));
+//    }
+//
+//    private Movie get(String POSTS_API_URL) throws IOException, InterruptedException {
+//        HttpClient client = HttpClient.newHttpClient();
+//        HttpRequest request = HttpRequest.newBuilder()
+//                .GET()
+//                .header("accept", "application/json")
+//                .uri(URI.create(POSTS_API_URL))
+//                .build();
+//        ObjectMapper mapper = new ObjectMapper();
+//        return mapper.readValue(client.send(request, HttpResponse.BodyHandlers.ofString()).body(), new TypeReference<Movie>() {
+//        });
+//    }
 
     @PostMapping("/addMovie")
     public Movie addMovie(@RequestBody Movie movie) {

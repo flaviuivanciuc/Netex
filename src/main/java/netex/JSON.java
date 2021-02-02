@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import netex.model.MovieSearch;
+import netex.model.MovieSearchObject;
 import netex.service.MovieService;
 
 import java.io.IOException;
@@ -36,12 +36,12 @@ public class JSON {
         factory.enable(JsonParser.Feature.IGNORE_UNDEFINED);
 
         ObjectMapper mapper = new ObjectMapper(factory);
-        MovieSearch movieSearch = mapper.readValue(response.body(), new TypeReference<>() {
+        MovieSearchObject movieSearchObject = mapper.readValue(response.body(), new TypeReference<>() {
         });
-        System.out.println(movieSearch.getMovieList().get(2));
+        System.out.println(movieSearchObject.getMovieList().get(2));
 
         MovieService movieService = null;
-        movieSearch.getMovieList().forEach(movie -> movieService.saveMovie(movie));
+        movieSearchObject.getMovieList().forEach(movie -> movieService.saveMovie(movie));
 //        movieService.saveMovie(movieSearch.getMovieList());
     }
 }

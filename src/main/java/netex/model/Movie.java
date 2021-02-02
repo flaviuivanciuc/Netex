@@ -17,7 +17,7 @@ public class Movie {
     @JsonProperty("Title")
     private String title;
     @JsonProperty("Year")
-    private Integer year;
+    private String year;
     @JsonProperty("Released")
     private String released;
     @JsonProperty("Plot")
@@ -27,7 +27,7 @@ public class Movie {
     @JsonProperty("Genre")
     private String genre;
     @JsonProperty("imdbRating")
-    private Float imdbRating;
+    private String imdbRating;
     @JsonProperty("Actors")
     private String actors;
     @JsonProperty("Writer")
@@ -38,7 +38,7 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(Integer id, String title, Integer year, String released, String plot, String rated, String genre, Float imdbRating, String actors, String writer, String director) {
+    public Movie(Integer id, String title, String year, String released, String plot, String rated, String genre, String imdbRating, String actors, String writer, String director) {
         this.id = id;
         this.title = title;
         this.year = year;
@@ -100,11 +100,11 @@ public class Movie {
         this.genre = genre;
     }
 
-    public Float getImdbRating() {
+    public String getImdbRating() {
         return imdbRating;
     }
 
-    public void setImdbRating(Float imdbRating) {
+    public void setImdbRating(String imdbRating) {
         this.imdbRating = imdbRating;
     }
 
@@ -132,11 +132,11 @@ public class Movie {
         this.director = director;
     }
 
-    public Integer getYear() {
+    public String getYear() {
         return year;
     }
 
-    public void setYear(Integer year) {
+    public void setYear(String year) {
         this.year = year;
     }
 
