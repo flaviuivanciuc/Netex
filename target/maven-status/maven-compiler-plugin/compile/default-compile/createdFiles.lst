@@ -5,3 +5,5 @@ netex\Main.class
 netex\JSON.class
 netex\repositories\MovieRepository.class
 netex\service\MovieService.class
+netex\model\MovieSearchObject.class
+netex\model\QMovie.class

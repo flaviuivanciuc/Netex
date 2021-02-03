@@ -1,15 +1,18 @@
 package netex.service;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import netex.model.Movie;
 import netex.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.util.List;
 
 @Service
 public class MovieService {
-
 
     @Autowired
     private MovieRepository repository;

@@ -1,14 +1,19 @@
 package netex.controller;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import netex.model.Movie;
+import netex.model.QMovie;
 import netex.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import java.util.ArrayList;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping(path = "/movies")
 public class MovieController {
 
@@ -49,6 +54,7 @@ public class MovieController {
 
     public MovieController(MovieService service) {
         this.service = service;
+
     }
 
 //    @GetMapping("/getMovies")
@@ -88,6 +94,24 @@ public class MovieController {
 //        });
 //    }
 
+    @GetMapping("/order-by-title")
+    public List<Movie> orderMoviesAlphabetically() {
+        List<Movie> movies = queryFactory().selectFrom(QMovie.movie).orderBy(QMovie.movie.title.asc()).fetch();
+        return movies;
+    }
+
+    @GetMapping("/search-movies-between-{yearX}-{yearY}")
+    public List<Movie> sortByYear(@PathVariable int yearX, @PathVariable int yearY) {
+        List<Movie> movieList = new ArrayList<>();
+        List<Movie> movies = queryFactory().selectFrom(QMovie.movie).fetch();
+        for (int i = 0; i < movies.size(); i++) {
+            int movieYear = Integer.parseInt(movies.get(i).getYear());
+            if (yearX <= movieYear && movieYear <= yearY)
+                movieList.add(movies.get(i));
+        }
+        return movieList;
+    }
+
     @PostMapping("/addMovie")
     public Movie addMovie(@RequestBody Movie movie) {
         return service.saveMovie(movie);
@@ -121,6 +145,13 @@ public class MovieController {
     @PutMapping("/putMovie")
     public Movie updateMovie(@RequestBody Movie movie) {
         return service.updateMovie(movie);
+    }
+
+    public JPAQueryFactory queryFactory() {
+        EntityManagerFactory emf =
+                Persistence.createEntityManagerFactory("movies");
+        EntityManager em = emf.createEntityManager();
+        return new JPAQueryFactory(em);
     }
 }
 
