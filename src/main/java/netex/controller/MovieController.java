@@ -4,12 +4,15 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import netex.model.Movie;
 import netex.model.QMovie;
 import netex.service.MovieService;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,45 +20,17 @@ import java.util.List;
 @RequestMapping(path = "/movies")
 public class MovieController {
 
-//        private static final String POSTS_API_URL_S = "http://www.omdbapi.com/?s=Fellowship&apikey=7b8f241f&page=2";
-//    private static final String POSTS_API_URL = "http://www.omdbapi.com/?apikey=7b8f241f&t=The_Lord_of_the_Rings:_The_Fellowship_of_the_Ring";
-
     @Autowired
     private MovieService service;
 
-    public MovieController() {
-//        String name = "Flaviu is doing stuff here!";
-//        System.out.println(name);
-//        try {
-//            for (int i = 0; i < 1; i++) {
-//                final String BASE_URL = "http://www.omdbapi.com";
-//
-//                HttpHeaders headers = new HttpHeaders();
-//                headers.setContentType(MediaType.APPLICATION_JSON);
-//
-//                HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-//
-//                RestTemplate restTemplate = new RestTemplate();
-//                ResponseEntity<Movie> responseEntity = restTemplate.exchange(BASE_URL + "/?apikey=7b8f241f&" +
-//                        "i=tt" + (int) (Math.random() * (1000000) + 1000000) +
-//                        "&type=movie", HttpMethod.GET, httpEntity, Movie.class);
-//
-//                Movie movie = responseEntity.getBody();
-//                assert movie != null;
-//                if (movie.getTitle() == null) {
-//                    continue;
-//                }
-//                service.saveMovie(movie);
-//            }
-//        } catch (RestClientException e) {
-//            e.printStackTrace();
-//        }
-    }
+//        private static final String POSTS_API_URL_S = "http://www.omdbapi.com/?s=Fellowship&apikey=7b8f241f&page=2";
+//    private static final String POSTS_API_URL = "http://www.omdbapi.com/?apikey=7b8f241f&t=The_Lord_of_the_Rings:_The_Fellowship_of_the_Ring";
 
-    public MovieController(MovieService service) {
-        this.service = service;
-
-    }
+    String urlString = "http://localhost:8983/solr/moviedatabase";
+    HttpSolrClient solr = new HttpSolrClient.Builder(urlString).build();
+    List<Movie> movies = queryFactory().selectFrom(QMovie.movie).fetch();
+//    solr.addBean(movies);
+//    solr.commit("indexing");
 
 //    @GetMapping("/getMovies")
 //    public List<Movie> getMoviesSearch() throws IOException, InterruptedException {
@@ -93,6 +68,40 @@ public class MovieController {
 //        return mapper.readValue(client.send(request, HttpResponse.BodyHandlers.ofString()).body(), new TypeReference<Movie>() {
 //        });
 //    }
+
+    public MovieController() throws IOException, SolrServerException {
+//        String name = "Flaviu is doing stuff here!";
+//        System.out.println(name);
+//        try {
+//            for (int i = 0; i < 1; i++) {
+//                final String BASE_URL = "http://www.omdbapi.com";
+//
+//                HttpHeaders headers = new HttpHeaders();
+//                headers.setContentType(MediaType.APPLICATION_JSON);
+//
+//                HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+//
+//                RestTemplate restTemplate = new RestTemplate();
+//                ResponseEntity<Movie> responseEntity = restTemplate.exchange(BASE_URL + "/?apikey=7b8f241f&" +
+//                        "i=tt" + (int) (Math.random() * (1000000) + 1000000) +
+//                        "&type=movie", HttpMethod.GET, httpEntity, Movie.class);
+//
+//                Movie movie = responseEntity.getBody();
+//                assert movie != null;
+//                if (movie.getTitle() == null) {
+//                    continue;
+//                }
+//                service.saveMovie(movie);
+//            }
+//        } catch (RestClientException e) {
+//            e.printStackTrace();
+//        }
+    }
+
+    public MovieController(MovieService service) throws IOException, SolrServerException {
+        this.service = service;
+
+    }
 
     @GetMapping("/order-by-title")
     public List<Movie> orderMoviesAlphabetically() {

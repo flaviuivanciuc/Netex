@@ -2,6 +2,7 @@ package netex.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.solr.client.solrj.beans.Field;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -15,24 +16,34 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @JsonProperty("Title")
+    @Field
     private String title;
     @JsonProperty("Year")
+    @Field
     private String year;
     @JsonProperty("Released")
+    @Field
     private String released;
     @JsonProperty("Plot")
+    @Field
     private String plot;
     @JsonProperty("Rated")
+    @Field
     private String rated;
     @JsonProperty("Genre")
+    @Field
     private String genre;
     @JsonProperty("imdbRating")
+    @Field
     private String imdbRating;
     @JsonProperty("Actors")
+    @Field
     private String actors;
     @JsonProperty("Writer")
+    @Field
     private String writer;
     @JsonProperty("Director")
+    @Field
     private String director;
 
     public Movie() {
