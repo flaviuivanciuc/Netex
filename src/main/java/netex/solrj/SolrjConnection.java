@@ -20,26 +20,6 @@ import java.util.List;
 @Component
 public class SolrjConnection {
 
-    public SolrjConnection() {
-//        indexingByUsingJavaObjectBinding();
-    }
-
-    public void indexingByUsingJavaObjectBinding() {
-        try {
-            List<Movie> movies = queryFactory().selectFrom(QMovie.movie).fetch();
-            System.out.printf("Indexing %d articles...\n", movies.size());
-            // send articles to Solr
-            SOLR_CLIENT.addBeans(movies);
-
-            // explicit commit pending documents for indexing
-            SOLR_CLIENT.commit();
-
-            System.out.printf("%d articles indexed.\n", movies.size());
-        } catch (SolrServerException | IOException e) {
-            System.err.printf("\nFailed to indexing articles: %s", e.getMessage());
-        }
-    }
-
     private static final String SOLR_CORE_URL = "http://localhost:8983/solr/moviedatabase";
     private static final SolrClient SOLR_CLIENT = getSolrClient();
 
@@ -47,13 +27,33 @@ public class SolrjConnection {
         return new HttpSolrClient.Builder(SOLR_CORE_URL).withConnectionTimeout(5000).withSocketTimeout(3000).build();
     }
 
+    public SolrjConnection() {
+//        indexingByUsingJavaObjectBinding();
+    }
+
+    public void indexingByUsingJavaObjectBinding() {
+        try {
+            List<Movie> movies = queryFactory().selectFrom(QMovie.movie).fetch();
+            System.out.printf("Indexing %d movies...\n", movies.size());
+            // send articles to Solr
+            SOLR_CLIENT.addBeans(movies);
+
+            // explicit commit pending documents for indexing
+            SOLR_CLIENT.commit();
+
+            System.out.printf("%d movies indexed.\n", movies.size());
+        } catch (SolrServerException | IOException e) {
+            System.err.printf("\nFailed to indexing movies: %s", e.getMessage());
+        }
+    }
+
     @Bean
     public void query() {
         // constructs a SolrQuery instance
         final SolrQuery solrQuery = new SolrQuery("year:2011");
         solrQuery.addField("id");
-//        solrQuery.addField("actors");
-//        solrQuery.addField("plot");
+//        solrQuery.addField("title");
+//        solrQuery.addField("imdbRating");
         solrQuery.setSort("id", SolrQuery.ORDER.asc);
         solrQuery.setRows(10);
 
@@ -62,14 +62,14 @@ public class SolrjConnection {
         try {
             queryResponse = SOLR_CLIENT.query(solrQuery);
         } catch (SolrServerException | IOException e) {
-            System.err.printf("Failed to search articles: %s", e.getMessage());
+            System.err.printf("Failed to search movies: %s", e.getMessage());
         }
 
         // converts to domain object and prints to standard output
         if (queryResponse != null) {
             List<Movie> movies = queryResponse.getBeans(Movie.class);
             for (Movie movie : movies) {
-                System.out.println(movie.toString());
+//                System.out.println(movie.toString());
             }
         }
     }
