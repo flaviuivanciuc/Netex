@@ -2,11 +2,8 @@ package netex.service;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import netex.model.Movie;
-import netex.model.MovieSearchObject;
 import netex.repositories.MovieRepository;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -43,6 +40,14 @@ public class MovieService {
 //                repository.save(movie);
 //            }
 //        }
+    }
+
+    public Movie getMovieByTitle() {
+        return repository.findByTitle("Atarashii me");
+    }
+
+    public Movie getMovieByTitleAndYear() {
+        return repository.findByTitleAndYear("Listen Charlie", "2011");
     }
 
     //POST

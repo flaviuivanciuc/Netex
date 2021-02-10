@@ -4,21 +4,24 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import netex.model.Movie;
 import netex.model.QMovie;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.params.MapSolrParams;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class SolrjConnection {
+
+    @Autowired
+    private JPAQueryFactory factory;
 
     private static final String SOLR_CORE_URL = "http://localhost:8983/solr/moviedatabase";
     private static final SolrClient SOLR_CLIENT = getSolrClient();
@@ -33,7 +36,7 @@ public class SolrjConnection {
 
     public void indexingByUsingJavaObjectBinding() {
         try {
-            List<Movie> movies = queryFactory().selectFrom(QMovie.movie).fetch();
+            List<Movie> movies = factory.selectFrom(QMovie.movie).fetch();
             System.out.printf("Indexing %d movies...\n", movies.size());
             // send articles to Solr
             SOLR_CLIENT.addBeans(movies);
@@ -49,36 +52,25 @@ public class SolrjConnection {
 
     @Bean
     public void query() {
-        // constructs a SolrQuery instance
-        final SolrQuery solrQuery = new SolrQuery("year:2011");
-        solrQuery.addField("id");
-//        solrQuery.addField("title");
-//        solrQuery.addField("imdbRating");
-        solrQuery.setSort("id", SolrQuery.ORDER.asc);
-        solrQuery.setRows(10);
+        // constructs a MapSolrParams instance
+        final Map<String, String> queryParamMap = new HashMap<String, String>();
+        queryParamMap.put("q", "year:2011");
+        queryParamMap.put("fl", "id, title, actors");
+        queryParamMap.put("sort", "id asc");
+        MapSolrParams queryParams = new MapSolrParams(queryParamMap);
 
         // send search request and gets the response
-        QueryResponse queryResponse = null;
+        QueryResponse response = null;
         try {
-            queryResponse = SOLR_CLIENT.query(solrQuery);
+            response = SOLR_CLIENT.query(queryParams);
         } catch (SolrServerException | IOException e) {
             System.err.printf("Failed to search movies: %s", e.getMessage());
         }
 
-        // converts to domain object and prints to standard output
-        if (queryResponse != null) {
-            List<Movie> movies = queryResponse.getBeans(Movie.class);
-            for (Movie movie : movies) {
-//                System.out.println(movie.toString());
-            }
+        // print results to stdout
+        if (response != null) {
+            System.out.println(response.getResults());
         }
-    }
-
-    public JPAQueryFactory queryFactory() {
-        EntityManagerFactory emf =
-                Persistence.createEntityManagerFactory("movies");
-        EntityManager em = emf.createEntityManager();
-        return new JPAQueryFactory(em);
     }
 }
 

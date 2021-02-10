@@ -6,4 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Integer> {
+
+    public Movie findByTitle(String Title);
+    public Movie findByTitleAndYear(String Title, String Year);
+
 }
