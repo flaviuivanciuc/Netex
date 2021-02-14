@@ -94,12 +94,4 @@ public class MovieService {
         existingMovie.setPlot(movie.getPlot());
         return repository.save(existingMovie);
     }
-
-    public JPAQueryFactory queryFactory() {
-        EntityManagerFactory emf =
-                Persistence.createEntityManagerFactory("movies");
-        EntityManager em = emf.createEntityManager();
-        return new JPAQueryFactory(em);
-    }
-
 }
