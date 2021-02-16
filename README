@@ -1,5 +1,5 @@
-This app connects to an API through an API key and retrieves 
-some data by unmarshalling it and converting it into POJO just 
-as like the DAO classes and stores all this data into a MariaDB 
-database.
-In the end you can search the database by an end point in your browser.
+The app connects to an API by an API Key and unmarshalls 
+JSON to POJO and stores it into a MariaDB.
+After that, querrys can be made using QueryDSL and SolrJ.
+
+
